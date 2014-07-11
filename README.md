@@ -28,7 +28,7 @@
 #### How to Deploy
 
 If Travis CI is watching this repo, it will deploy the site automatically after
-the build. Otherwise, you may deploy manually by running:
+each commit. Otherwise, you may deploy it manually by running:
 
 ```
 > gulp deploy
