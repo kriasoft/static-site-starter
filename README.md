@@ -11,7 +11,7 @@
  2. Open it [GitHub for Mac](https://mac.github.com/)
     (or [GitHub for Windows](https://windows.github.com/)) and start hacking
 
-#### Blog Posts & Articles
+#### Blogs & Articles
 
  - [Static website on S3, CloudFront and Route 53, the right way!](http://www.michaelgallego.fr/blog/2013/08/27/static-website-on-s3-cloudfront-and-route-53-the-right-way/)
 
@@ -33,7 +33,7 @@ the build. Otherwise, you may deploy manually by running:
 You just need to make sure that you set AWS_KEY, AWS_SECRET and AWS_BUCKET
 environment properties.
 
-#### How to Keep Up-to-Date
+#### Keeping Up-to-Date
 
 You may want to pull and merge the latest updates from this repo back to your
 local project. To do so, you simply run:
