@@ -37,3 +37,14 @@ gulp.task('deploy', function () {
         }));
 });
 ```
+
+### How to securely store passwords and keys in my public repo?
+
+If you're using a public Git repository for your site, you should never embed
+your passwords and keys as plain text into your source code. Travis CI allows
+you to store passwords securely by encrypting them with a public key. For more
+information visit: http://docs.travis-ci.com/user/encryption-keys/
+
+If you don't have Ruby installed, you can use Node.js-based [travis-encrypt]
+(https://www.npmjs.org/package/travis-encrypt) utility to encrypt and save
+your passwords in [.travis.yml](../.travis.yml) file.

@@ -1,8 +1,8 @@
 language: node_js
 env:
   global:
-    - "AWS_KEY=<YOUR_ECNRYPTED_AWS_KEY>"
-    - "AWS_SECRET=<YOUR_ECNRYPTED_AWS_SECRET>"
+    - "AWS_KEY=<YOUR_ENCRYPTED_AWS_KEY>"
+    - "AWS_SECRET=<YOUR_ENCRYPTED_AWS_SECRET>"
 node_js:
 - '0.10'
 before_script:
