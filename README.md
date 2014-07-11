@@ -58,3 +58,8 @@ For more details see: [Syncing a Fork on GitHub](https://help.github.com/article
 #### Credits
 
  - Konstantin Tarkus -- [@koistya](https://twitter.com/koistya)
+
+#### Support
+
+Have questions or need help? Contact me via email [hello@tarkus.me](mailto:hello@tarkus.me)
+or Skype: koistya.
