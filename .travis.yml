@@ -1,9 +1,8 @@
 language: node_js
 env:
   global:
-  - secure: H21RvMUOClEcAJurrl0Sswysix/LgvjtQK/ga/rkB8AtoG5mo5RRoLmFfuy3YKs42lbKEv2wFKA2ELTsxSR1ETU8bTykj2SsB45FwuKHmamTz+c0U/sjE63fT97KpU0nopMqXGxDJTTPtHEYwewIFwiw4s9ze+N78Cc8lKK/lSk=
-  - secure: oYfp/eoyRCvX6ozkDmADSFAqzdahQSr5d5GT/wrCj/9FF57cpxPlLksIET+flfS0sqRQHm5MieIralCX9crV6tLk0e2VLyVCfC0CXSPASSM2eREtMwfVwv9rw1BvUSUCiJ6GhpZ7EXAHGYMvSgsvFEe0j16kj+DPfVy2l1T5CTA=
-  - secure: DcndV8KoSUc0MBKZW9991f4nOKgt22ju9AseR9Qh54ZiVvZU+0OUkb1KdChy+V/AY6oIvXUqJphp9guP7LoOSqWzI3B/Pl/MpfvF9qmONcpPotTQtmenqHGxenzVoGul1Jrz8UDSw98xOuV34/H1tuCHAZ0SllnnJwNPYSKk4iU=
+    - "AWS_KEY=<YOUR_ECNRYPTED_AWS_KEY>"
+    - "AWS_SECRET=<YOUR_ECNRYPTED_AWS_SECRET>"
 node_js:
 - '0.10'
 before_script:

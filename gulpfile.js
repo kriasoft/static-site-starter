@@ -67,7 +67,7 @@ gulp.task('styles', function () {
         .pipe($.less())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
         .pipe($.csscomb())
-        .pipe($.cssmin())
+        .pipe(RELEASE ? $.cssmin() : $.util.noop())
         .pipe($.rename('style.css'))
         .pipe(gulp.dest(DEST + '/css'));
 });
@@ -84,9 +84,9 @@ gulp.task('deploy', function () {
     var aws = {
         "key": process.env.AWS_KEY,
         "secret": process.env.AWS_SECRET,
-        "bucket": process.env.AWS_BUCKET,
-        "region": "us-standard",
-        "distributionId": "XXXXXXXX"
+        "bucket": 'XXXXXXXX',
+        "region": 'us-standard',
+        "distributionId": 'XXXXXXXX'
     };
 
     // Create a new publisher
@@ -105,7 +105,6 @@ gulp.task('deploy', function () {
                 /^\/browserconfig.xml$/g,
                 /^\/crossdomain.xml$/g,
                 /^\/error.html$/g,
-                /^\/favicon.ico$/g,
                 /^\/humans.txt$/g,
                 /^\/robots.txt$/g
             ]
