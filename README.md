@@ -11,6 +11,10 @@
  2. Open it in [GitHub for Mac](https://mac.github.com/)
     (or [GitHub for Windows](https://windows.github.com/)) and start hacking
 
+#### Documentation
+
+ * [FAQ](./docs/faq.md)
+
 #### Blogs & Articles
 
  - [Static website on S3, CloudFront and Route 53, the right way!](http://www.michaelgallego.fr/blog/2013/08/27/static-website-on-s3-cloudfront-and-route-53-the-right-way/)
