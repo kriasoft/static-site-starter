@@ -1,10 +1,17 @@
 ## Static Site Starter Kit
 
-> This is a static site project template powered by Gulp, Bootstrap, LESS;
-> and configured for deployment to [Amazon S3](http://aws.amazon.com/s3/)
+> This is a static site project template powered by [Gulp](http://gulpjs.com/),
+> [Bootstrap](http://getbootstrap.com/), [LESS](http://lesscss.org/); and
+> configured for deployment to [Amazon S3](http://aws.amazon.com/s3/)
 > / [CloudFront](http://aws.amazon.com/cloudfront/) (via [Travis CI](https://travis-ci.org/)).
 
-#### Related Articles
+#### Getting Started
+
+ 1. [Fork this repo](https://github.com/kriasoft/static-site-starter/fork) and rename it under your own GitHub account
+ 2. Open it [GitHub for Mac](https://mac.github.com/)
+    (or [GitHub for Windows](https://windows.github.com/)) and start hacking
+
+#### Blogs & Articles
 
  - [Static website on S3, CloudFront and Route 53, the right way!](http://www.michaelgallego.fr/blog/2013/08/27/static-website-on-s3-cloudfront-and-route-53-the-right-way/)
 
