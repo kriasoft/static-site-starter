@@ -15,6 +15,7 @@ var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
 var DEST = './build';
+var RELEASE = Boolean(argv.release);
 var GOOGLE_ANALYTICS_ID = 'UA-XXXXX-X';
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -45,12 +46,17 @@ gulp.task('fonts', function () {
 
 // HTML pages
 gulp.task('pages', function () {
-    return gulp.src('src/**/*.html')
-        .pipe($.htmlmin({
+    return gulp.src(['src/**/*.{hbs,html}', '!src/layouts/**', '!src/partials/**'])
+        .pipe($.if('*.hbs', $.assemble({
+            partials: 'src/partials/**/*.hbs',
+            layout: 'default.hbs',
+            layoutdir: 'src/layouts'
+        })))
+        .pipe(RELEASE ? $.htmlmin({
             removeComments: true,
             collapseWhitespace: true,
             minifyJS: true, minifyCSS: true
-        }))
+        }) : $.util.noop())
         .pipe($.replace('UA-XXXXX-X', GOOGLE_ANALYTICS_ID))
         .pipe(gulp.dest(DEST));
 });
