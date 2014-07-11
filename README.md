@@ -8,7 +8,7 @@
 #### Getting Started
 
  1. [Fork this repo](https://github.com/kriasoft/static-site-starter/fork) and rename it under your own GitHub account
- 2. Open it [GitHub for Mac](https://mac.github.com/)
+ 2. Open it in [GitHub for Mac](https://mac.github.com/)
     (or [GitHub for Windows](https://windows.github.com/)) and start hacking
 
 #### Blogs & Articles
@@ -44,7 +44,7 @@ local project. To do so, you simply run:
 > git merge upstream/master
 ```
 
-For more details see: https://help.github.com/articles/syncing-a-fork
+For more details see: [Syncing a Fork on GitHub](https://help.github.com/articles/syncing-a-fork)
 
 #### Credits
 
