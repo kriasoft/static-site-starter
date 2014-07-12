@@ -43,7 +43,7 @@ gulp.task('clean', del.bind(null, [DEST]));
 
 // Static files
 gulp.task('assets', function () {
-    src.assets = 'src/**/*.{ico,jpg,png,txt,xml}';
+    src.assets = 'src/assets/**';
     return gulp.src(src.assets)
         .pipe(gulp.dest(DEST))
         .pipe($.if(watch, reload({stream: true})));
@@ -57,11 +57,12 @@ gulp.task('fonts', function () {
 
 // HTML pages
 gulp.task('pages', function () {
-    src.pages = 'src/**/*.{hbs,html}';
-    return gulp.src(['src/**/*.{hbs,html}', '!src/layouts/**', '!src/partials/**'])
+    src.pages = 'src/pages/**';
+    return gulp.src(src.pages)
         .pipe($.if('*.hbs', $.assemble({
             partials: 'src/partials/**/*.hbs',
-            layout: 'default.hbs',
+            layout: 'default',
+            layoutext: '.hbs',
             layoutdir: 'src/layouts'
         })))
         .pipe(RELEASE ? $.htmlmin({
@@ -76,7 +77,7 @@ gulp.task('pages', function () {
 
 // CSS style sheets
 gulp.task('styles', function () {
-    src.styles = 'src/**/*.less';
+    src.styles = 'src/styles/**/*.{css,less}';
     return gulp.src('src/styles/bootstrap.less')
         .pipe($.less())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
@@ -92,7 +93,7 @@ gulp.task('build', ['clean'], function (cb) {
     runSequence(['assets', 'fonts', 'pages', 'styles'], cb);
 });
 
-// Run development web server
+// Run BrowserSync
 gulp.task('serve', ['build'], function () {
     browserSync({
         notify: false,
@@ -105,7 +106,7 @@ gulp.task('serve', ['build'], function () {
     watch = true;
 });
 
-// Publish
+// Publish to Amazon S3 / CloudFront
 gulp.task('deploy', function () {
     var awspublish = require('gulp-awspublish');
     var aws = {
@@ -115,11 +116,7 @@ gulp.task('deploy', function () {
         "region": 'us-standard',
         "distributionId": 'XXXXXXXX'
     };
-
-    // Create a new publisher
     var publisher = awspublish.create(aws);
-
-    // Define custom headers
     var headers = {
         'Cache-Control': 'max-age=315360000, no-transform, public'
     };
@@ -136,9 +133,9 @@ gulp.task('deploy', function () {
                 /^\/robots.txt$/g
             ]
         }))
-        // Gzip, Set Content-Encoding headers
+        // Gzip, set Content-Encoding headers
         .pipe(awspublish.gzip())
-        // Publisher will add Content-Length, Content-Type and  headers specified above
+        // Publisher will add Content-Length, Content-Type and headers specified above
         // If not specified it will set x-amz-acl to public-read by default
         .pipe(publisher.publish(headers))
         // Create a cache file to speed up consecutive uploads
