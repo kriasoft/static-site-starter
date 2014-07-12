@@ -1,4 +1,4 @@
-## Static Site Starter Kit
+## Static Website Starter Kit
 
 > This is a static site project template powered by [Gulp](http://gulpjs.com/),
 > [Assemble](http://assemble.io/), [Handlebars](http://handlebarsjs.com/),
