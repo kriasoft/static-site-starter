@@ -1,6 +1,6 @@
 /*!
  * Static Site Starter Kit | https://github.com/kriasoft/static-site-starter
- * Copyright (c) Konstantin Tarkus, KriaSoft LLC. All rights reserved. See LICENSE.txt
+ * Copyright (c) Konstantin Tarkus, KriaSoft LLC. All rights reserved. See COPYRIGHT.txt
  */
 
 'use strict';
@@ -11,6 +11,8 @@ var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
+var browserSync = require('browser-sync');
+var pagespeed = require('psi');
 var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
@@ -29,13 +31,22 @@ var AUTOPREFIXER_BROWSERS = [
     'bb >= 10'
 ];
 
+var src = {};
+var watch = false;
+var reload = browserSync.reload;
+
+// The default task
+gulp.task('default', ['serve']);
+
 // Clean up
 gulp.task('clean', del.bind(null, [DEST]));
 
 // Static files
 gulp.task('assets', function () {
-    return gulp.src('src/**/*.{ico,jpg,png,txt,xml}')
-        .pipe(gulp.dest(DEST));
+    src.assets = 'src/**/*.{ico,jpg,png,txt,xml}';
+    return gulp.src(src.assets)
+        .pipe(gulp.dest(DEST))
+        .pipe($.if(watch, reload({stream: true})));
 });
 
 // Fonts
@@ -46,6 +57,7 @@ gulp.task('fonts', function () {
 
 // HTML pages
 gulp.task('pages', function () {
+    src.pages = 'src/**/*.{hbs,html}';
     return gulp.src(['src/**/*.{hbs,html}', '!src/layouts/**', '!src/partials/**'])
         .pipe($.if('*.hbs', $.assemble({
             partials: 'src/partials/**/*.hbs',
@@ -58,18 +70,21 @@ gulp.task('pages', function () {
             minifyJS: true, minifyCSS: true
         }) : $.util.noop())
         .pipe($.replace('UA-XXXXX-X', GOOGLE_ANALYTICS_ID))
-        .pipe(gulp.dest(DEST));
+        .pipe(gulp.dest(DEST))
+        .pipe($.if(watch, reload({stream: true})));
 });
 
 // CSS style sheets
 gulp.task('styles', function () {
+    src.styles = 'src/**/*.less';
     return gulp.src('src/styles/bootstrap.less')
         .pipe($.less())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
         .pipe($.csscomb())
         .pipe(RELEASE ? $.cssmin() : $.util.noop())
         .pipe($.rename('style.css'))
-        .pipe(gulp.dest(DEST + '/css'));
+        .pipe(gulp.dest(DEST + '/css'))
+        .pipe($.if(watch, reload({stream: true})));
 });
 
 // Build
@@ -77,10 +92,22 @@ gulp.task('build', ['clean'], function (cb) {
     runSequence(['assets', 'fonts', 'pages', 'styles'], cb);
 });
 
+// Run development web server
+gulp.task('serve', ['build'], function () {
+    browserSync({
+        notify: false,
+        server: { baseDir: [DEST] }
+    });
+
+    gulp.watch(src.assets, ['assets']);
+    gulp.watch(src.pages, ['pages']);
+    gulp.watch(src.styles, ['styles']);
+    watch = true;
+});
+
 // Publish
 gulp.task('deploy', function () {
     var awspublish = require('gulp-awspublish');
-
     var aws = {
         "key": process.env.AWS_KEY,
         "secret": process.env.AWS_SECRET,
@@ -121,3 +148,13 @@ gulp.task('deploy', function () {
         // Updates the Default Root Object of a CloudFront distribution
         .pipe($.cloudfront(aws));
 });
+
+// Run PageSpeed Insights
+// Update `url` below to the public URL for your site
+gulp.task('pagespeed', pagespeed.bind(null, {
+    // By default, we use the PageSpeed Insights free (no API key) tier.
+    // You can use a Google Developer API key if you have one.
+    // See http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
+    url: 'https://example.com',
+    strategy: 'mobile'
+}));

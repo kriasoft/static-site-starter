@@ -6,6 +6,7 @@
     "bootstrap": "^3.2.0"
   },
   "devDependencies": {
+    "browser-sync": "^1.2.1",
     "del": "^0.1.1",
     "gulp": "^3.8.6",
     "gulp-assemble": "^0.1.7",
@@ -23,6 +24,7 @@
     "gulp-rev-all": "^0.5.11",
     "gulp-util": "^2.2.20",
     "minimist": "^0.2.0",
+    "psi": "^0.1.1",
     "run-sequence": "^0.3.6"
   }
 }
