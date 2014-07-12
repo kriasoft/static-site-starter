@@ -1,10 +1,10 @@
 ## Static Site Starter Kit
 
 > This is a static site project template powered by [Gulp](http://gulpjs.com/),
+> [Assemble](http://assemble.io/), [Handlebars](http://handlebarsjs.com/),
 > [Bootstrap](http://getbootstrap.com/), [LESS](http://lesscss.org/),
-> [Assemble](http://assemble.io/), [Handlebars](http://handlebarsjs.com/); and
-> pre-configured for deployment to [Amazon S3](http://aws.amazon.com/s3/)
-> / [CloudFront](http://aws.amazon.com/cloudfront/)
+> [BrowserSync](http://www.browsersync.io); and pre-configured for deployment to
+> [Amazon S3](http://aws.amazon.com/s3/) / [CloudFront](http://aws.amazon.com/cloudfront/)
 > ([CDN](http://en.wikipedia.org/wiki/Content_delivery_network) hosting).
 
 #### Getting Started
