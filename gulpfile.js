@@ -43,7 +43,7 @@ gulp.task('clean', del.bind(null, [DEST]));
 
 // Static files
 gulp.task('assets', function () {
-    src.assets = 'src/assets/**';
+    src.assets = 'assets/**';
     return gulp.src(src.assets)
         .pipe(gulp.dest(DEST))
         .pipe($.if(watch, reload({stream: true})));
@@ -57,19 +57,19 @@ gulp.task('fonts', function () {
 
 // HTML pages
 gulp.task('pages', function () {
-    src.pages = 'src/pages/**';
+    src.pages = 'pages/**/*';
     return gulp.src(src.pages)
         .pipe($.if('*.hbs', $.assemble({
-            partials: 'src/partials/**/*.hbs',
+            partials: 'partials/**/*.hbs',
             layout: 'default',
             layoutext: '.hbs',
-            layoutdir: 'src/layouts'
+            layoutdir: 'layouts'
         })))
-        .pipe(RELEASE ? $.htmlmin({
+        .pipe($.if(RELEASE, $.htmlmin({
             removeComments: true,
             collapseWhitespace: true,
             minifyJS: true, minifyCSS: true
-        }) : $.util.noop())
+        })))
         .pipe($.replace('UA-XXXXX-X', GOOGLE_ANALYTICS_ID))
         .pipe(gulp.dest(DEST))
         .pipe($.if(watch, reload({stream: true})));
@@ -77,8 +77,8 @@ gulp.task('pages', function () {
 
 // CSS style sheets
 gulp.task('styles', function () {
-    src.styles = 'src/styles/**/*.{css,less}';
-    return gulp.src('src/styles/bootstrap.less')
+    src.styles = 'styles/**/*.{css,less}';
+    return gulp.src('styles/bootstrap.less')
         .pipe($.less())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
         .pipe($.csscomb())
