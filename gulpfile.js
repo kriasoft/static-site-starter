@@ -88,9 +88,21 @@ gulp.task('styles', function () {
         .pipe($.if(watch, reload({stream: true})));
 });
 
+// JavaScript
+gulp.task('scripts', function () {
+    src.scripts = ['scripts/plugins.js', 'scripts/main.js'];
+    return gulp.src(src.scripts)
+        .pipe($.if(!RELEASE, $.sourcemaps.init()))
+        .pipe($.concat('bundle.js'))
+        .pipe($.if(RELEASE, $.uglify()))
+        .pipe($.if(!RELEASE, $.sourcemaps.write()))
+        .pipe(gulp.dest(DEST + '/js'))
+        .pipe($.if(watch, reload({stream: true})));
+});
+
 // Build
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['assets', 'fonts', 'pages', 'styles'], cb);
+    runSequence(['assets', 'fonts', 'pages', 'styles', 'scripts'], cb);
 });
 
 // Run BrowserSync
@@ -103,6 +115,7 @@ gulp.task('serve', ['build'], function () {
     gulp.watch(src.assets, ['assets']);
     gulp.watch(src.pages, ['pages']);
     gulp.watch(src.styles, ['styles']);
+    gulp.watch(src.scripts, ['scripts']);
     watch = true;
 });
 
