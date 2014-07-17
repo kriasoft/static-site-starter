@@ -57,8 +57,8 @@ gulp.task('fonts', function () {
 
 // HTML pages
 gulp.task('pages', function () {
-    src.pages = 'pages/**/*';
-    return gulp.src(src.pages)
+    src.pages = ['pages/**/*', 'layouts/**/*', 'partials/**/*'];
+    return gulp.src(src.pages[0])
         .pipe($.if('*.hbs', $.assemble({
             partials: 'partials/**/*.hbs',
             layout: 'default',
