@@ -34,12 +34,36 @@ var AUTOPREFIXER_BROWSERS = [
 var src = {};
 var watch = false;
 var reload = browserSync.reload;
+var pkgs = (function () {
+    var temp = {};
+    var map = function (source) {
+        for (var key in source) {
+            temp[key.replace(/[^a-z0-9]/gi, '')] = source[key].substring(1);
+        }
+    };
+    map(require('./package.json').dependencies);
+    map(require('./bower.json').dependencies);
+    return temp;
+}());
 
 // The default task
 gulp.task('default', ['serve']);
 
 // Clean up
 gulp.task('clean', del.bind(null, [DEST]));
+
+// 3rd party libraries
+gulp.task('vendor', function () {
+    var merge = require('merge-stream');
+    return merge(
+        gulp.src('bower_components/jquery/dist/**')
+            .pipe(gulp.dest(DEST + '/vendor/jquery-' + pkgs.jquery)),
+        gulp.src('bower_components/modernizr/modernizr.js')
+            .pipe($.rename('modernizr.min.js'))
+            .pipe($.uglify())
+            .pipe(gulp.dest(DEST + '/vendor/modernizr-' + pkgs.modernizr))
+    );
+});
 
 // Static files
 gulp.task('assets', function () {
@@ -60,6 +84,7 @@ gulp.task('pages', function () {
     src.pages = ['pages/**/*', 'layouts/**/*', 'partials/**/*'];
     return gulp.src(src.pages[0])
         .pipe($.if('*.hbs', $.assemble({
+            data: { pkgs: pkgs },
             partials: 'partials/**/*.hbs',
             layout: 'default',
             layoutext: '.hbs',
@@ -102,7 +127,7 @@ gulp.task('scripts', function () {
 
 // Build
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['assets', 'fonts', 'pages', 'styles', 'scripts'], cb);
+    runSequence(['vendor', 'assets', 'fonts', 'pages', 'styles', 'scripts'], cb);
 });
 
 // Run BrowserSync

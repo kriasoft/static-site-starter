@@ -2,5 +2,6 @@
 # https://help.github.com/articles/ignoring-files
 
 build
+bower_components
 node_modules
 npm-debug.log
