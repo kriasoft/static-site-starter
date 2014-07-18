@@ -10,6 +10,7 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
+var merge = require('merge-stream');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var pagespeed = require('psi');
@@ -54,7 +55,6 @@ gulp.task('clean', del.bind(null, [DEST]));
 
 // 3rd party libraries
 gulp.task('vendor', function () {
-    var merge = require('merge-stream');
     return merge(
         gulp.src('bower_components/jquery/dist/**')
             .pipe(gulp.dest(DEST + '/vendor/jquery-' + pkgs.jquery)),
@@ -70,6 +70,14 @@ gulp.task('assets', function () {
     src.assets = 'assets/**';
     return gulp.src(src.assets)
         .pipe(gulp.dest(DEST))
+        .pipe($.if(watch, reload({stream: true})));
+});
+
+// Images
+gulp.task('images', function () {
+    src.images = 'images/**';
+    return gulp.src(src.images)
+        .pipe(gulp.dest(DEST + '/img'))
         .pipe($.if(watch, reload({stream: true})));
 });
 
@@ -127,7 +135,7 @@ gulp.task('scripts', function () {
 
 // Build
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['vendor', 'assets', 'fonts', 'pages', 'styles', 'scripts'], cb);
+    runSequence(['vendor', 'assets', 'images', 'fonts', 'pages', 'styles', 'scripts'], cb);
 });
 
 // Run BrowserSync
@@ -138,6 +146,7 @@ gulp.task('serve', ['build'], function () {
     });
 
     gulp.watch(src.assets, ['assets']);
+    gulp.watch(src.images, ['images']);
     gulp.watch(src.pages, ['pages']);
     gulp.watch(src.styles, ['styles']);
     gulp.watch(src.scripts, ['scripts']);
