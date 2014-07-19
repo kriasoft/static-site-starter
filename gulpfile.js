@@ -79,6 +79,10 @@ gulp.task('assets', function () {
 gulp.task('images', function () {
     src.images = 'images/**';
     return gulp.src(src.images)
+        .pipe($.cache($.imagemin({
+            progressive: true,
+            interlaced: true
+        })))
         .pipe(gulp.dest(DEST + '/img'))
         .pipe($.if(watch, reload({stream: true})));
 });
