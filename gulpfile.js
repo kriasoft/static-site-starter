@@ -17,10 +17,11 @@ var pagespeed = require('psi');
 var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
-var DEST = './build';
-var RELEASE = Boolean(argv.release);
-var GOOGLE_ANALYTICS_ID = 'UA-XXXXX-X';
-var AUTOPREFIXER_BROWSERS = [
+var DEST = './build';                   // The build output folder
+var TEST = !!argv.test;                 // Deploy to a test or production server?
+var RELEASE = !!argv.release;           // Minimize and optimize during a build?
+var GOOGLE_ANALYTICS_ID = 'UA-XXXXX-X'; // https://www.google.com/analytics/web/
+var AUTOPREFIXER_BROWSERS = [           // https://github.com/ai/autoprefixer
     'ie >= 10',
     'ie_mob >= 10',
     'ff >= 30',
@@ -69,6 +70,7 @@ gulp.task('vendor', function () {
 gulp.task('assets', function () {
     src.assets = 'assets/**';
     return gulp.src(src.assets)
+        .pipe($.if('**/robots.txt', TEST ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
         .pipe(gulp.dest(DEST))
         .pipe($.if(watch, reload({stream: true})));
 });
@@ -112,11 +114,13 @@ gulp.task('pages', function () {
 gulp.task('styles', function () {
     src.styles = 'styles/**/*.{css,less}';
     return gulp.src('styles/bootstrap.less')
+        .pipe($.if(!RELEASE, $.sourcemaps.init()))
         .pipe($.less())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
         .pipe($.csscomb())
         .pipe(RELEASE ? $.cssmin() : $.util.noop())
         .pipe($.rename('style.css'))
+        .pipe($.if(!RELEASE, $.sourcemaps.write()))
         .pipe(gulp.dest(DEST + '/css'))
         .pipe($.if(watch, reload({stream: true})));
 });
