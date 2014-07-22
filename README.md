@@ -38,7 +38,7 @@
 > gulp          # or `gulp --release`
 ```
 
-This command builds the project, launches [browser-sync](http://www.browsersync.io)
+This command builds the project, launches [BrowserSync](http://www.browsersync.io)
 development server and starts listening for modifications in source files.
 
 #### How to Deploy
@@ -48,7 +48,7 @@ the site automatically after each commit. Otherwise, you may deploy it manually
 by running:
 
 ```
-> gulp deploy
+> gulp deploy   # or `gulp deploy --production`
 ```
 
 You just need to make sure that you have set AWS_KEY and AWS_SECRET environment
@@ -67,9 +67,10 @@ back to your local project. To do so, you simply run:
 
 For more details see: [Syncing a Fork on GitHub](https://help.github.com/articles/syncing-a-fork)
 
-#### Credits
+#### Contributors
 
  - Konstantin Tarkus -- [@koistya](https://twitter.com/koistya)
+ - Vladimir Kutepov -- [@frenzzy](https://github.com/frenzzy)
 
 #### Support
 

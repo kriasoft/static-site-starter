@@ -18,7 +18,6 @@ var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
 var DEST = './build';                   // The build output folder
-var TEST = !!argv.test;                 // Deploy to a test or production server?
 var RELEASE = !!argv.release;           // Minimize and optimize during a build?
 var GOOGLE_ANALYTICS_ID = 'UA-XXXXX-X'; // https://www.google.com/analytics/web/
 var AUTOPREFIXER_BROWSERS = [           // https://github.com/ai/autoprefixer
@@ -70,7 +69,6 @@ gulp.task('vendor', function () {
 gulp.task('assets', function () {
     src.assets = 'assets/**';
     return gulp.src(src.assets)
-        .pipe($.if('**/robots.txt', TEST ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
         .pipe(gulp.dest(DEST))
         .pipe($.if(watch, reload({stream: true})));
 });
@@ -177,6 +175,7 @@ gulp.task('deploy', function () {
     };
 
     return gulp.src('build/**')
+        .pipe($.if('**/robots.txt', !argv.production ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
         // Add a revisioned suffix to the filename for each static asset
         .pipe($.revAll({
             ignore: [
