@@ -30,7 +30,7 @@
     "gulp-util": "^3.0.0",
     "merge-stream": "^0.1.5",
     "minimist": "^1.1.0",
-    "psi": "^0.1.1",
+    "psi": "^0.1.2",
     "run-sequence": "^0.3.6"
   }
 }
