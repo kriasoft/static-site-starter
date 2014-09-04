@@ -14,7 +14,7 @@
     "gulp-awspublish": "0.0.23",
     "gulp-cache": "^0.2.2",
     "gulp-cloudfront": "0.0.14",
-    "gulp-concat": "^2.3.4",
+    "gulp-concat": "^2.3.5",
     "gulp-csscomb": "^3.0.2",
     "gulp-cssmin": "^0.1.6",
     "gulp-htmlmin": "^0.2.0",
