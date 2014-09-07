@@ -146,9 +146,29 @@ gulp.task('build', ['clean'], function (cb) {
 
 // Run BrowserSync
 gulp.task('serve', ['build'], function () {
+
+    var path = require('path');
+    var url = require('url');
+    var fs = require('fs');
+
     browserSync({
         notify: false,
-        server: { baseDir: [DEST] }
+        // Run as an https by uncommenting 'https: true'
+        // Note: this uses an unsigned certificate which on first access
+        //       will present a certificate warning in the browser.
+        // https: true,
+        server: {
+            baseDir: DEST,
+            middleware: function (req, res, cb) {
+                var uri = url.parse(req.url);
+                if (uri.pathname.length > 1 &&
+                    path.extname(uri.pathname) === '' &&
+                    fs.existsSync(DEST + uri.pathname + '.html')) {
+                    req.url = uri.pathname + '.html' + (uri.search || '');
+                }
+                cb();
+            }
+        }
     });
 
     gulp.watch(src.assets, ['assets']);
