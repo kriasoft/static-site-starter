@@ -1,4 +1,4 @@
-## Static Website Starter Kit
+## Static Website Starter Kit &nbsp; [![Tips](http://img.shields.io/gratipay/koistya.svg?style=flat)](https://gratipay.com/koistya)
 
 > This is a static site project template powered by [Gulp](http://gulpjs.com/),
 > [Assemble](http://assemble.io/), [Handlebars](http://handlebarsjs.com/),
