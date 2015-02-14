@@ -4,7 +4,7 @@ env:
     - secure: <YOUR_ENCRYPTED_DATA>
 node_js:
 - '0.10'
-before_script:
+before_install:
 - npm uninstall browser-sync --save-dev
 script:
 - node ./node_modules/gulp/bin/gulp build --release
