@@ -26,7 +26,6 @@ var $ = require('gulp-load-plugins')();
 var del = require('del');
 var merge = require('merge-stream');
 var runSequence = require('run-sequence');
-var browserSync = require('browser-sync');
 var pagespeed = require('psi');
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -47,7 +46,6 @@ var AUTOPREFIXER_BROWSERS = [             // https://github.com/ai/autoprefixer
 
 var src = {};
 var watch = false;
-var reload = browserSync.reload;
 var pkgs = require('./package.json').dependencies;
 
 // The default task
@@ -72,8 +70,7 @@ gulp.task('vendor', function () {
 gulp.task('assets', function () {
   src.assets = 'assets/**';
   return gulp.src(src.assets)
-    .pipe(gulp.dest('build'))
-    .pipe($.if(watch, reload({stream: true})));
+    .pipe(gulp.dest('build'));
 });
 
 // Images
@@ -84,8 +81,7 @@ gulp.task('images', function () {
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest('build/img'))
-    .pipe($.if(watch, reload({stream: true})));
+    .pipe(gulp.dest('build/img'));
 });
 
 // Fonts
@@ -110,8 +106,7 @@ gulp.task('pages', function () {
       collapseWhitespace: true,
       minifyJS: true, minifyCSS: true
     })))
-    .pipe(gulp.dest('build'))
-    .pipe($.if(watch, reload({stream: true})));
+    .pipe(gulp.dest('build'));
 });
 
 // CSS style sheets
@@ -125,8 +120,7 @@ gulp.task('styles', function () {
     .pipe(RELEASE ? $.cssmin() : $.util.noop())
     .pipe($.rename('style.css'))
     .pipe($.if(!RELEASE, $.sourcemaps.write()))
-    .pipe(gulp.dest('build/css'))
-    .pipe($.if(watch, reload({stream: true})));
+    .pipe(gulp.dest('build/css'));
 });
 
 // JavaScript
@@ -137,8 +131,7 @@ gulp.task('scripts', function () {
     .pipe($.concat('bundle.js'))
     .pipe($.if(RELEASE, $.uglify()))
     .pipe($.if(!RELEASE, $.sourcemaps.write()))
-    .pipe(gulp.dest('build/js'))
-    .pipe($.if(watch, reload({stream: true})));
+    .pipe(gulp.dest('build/js'));
 });
 
 // Build
@@ -152,6 +145,7 @@ gulp.task('serve', ['build'], function () {
   var path = require('path');
   var url = require('url');
   var fs = require('fs');
+  var browserSync = require('browser-sync');
 
   browserSync({
     notify: false,
@@ -178,48 +172,20 @@ gulp.task('serve', ['build'], function () {
   gulp.watch(src.pages, ['pages']);
   gulp.watch(src.styles, ['styles']);
   gulp.watch(src.scripts, ['scripts']);
+  gulp.watch('./build/**/*.*', function(file) {
+    browserSync.reload(path.relative(__dirname, file.path));
+  });
   watch = true;
 });
 
-// Publish to Amazon S3 / CloudFront
+// Publish to GitHub Pages
 gulp.task('deploy', function () {
-  var awspublish = require('gulp-awspublish');
-  var aws = {
-    "key": process.env.AWS_KEY,
-    "secret": process.env.AWS_SECRET,
-    "bucket": 'XXXXXXXX',
-    "region": 'us-standard',
-    "distributionId": 'XXXXXXXX'
-  };
-  var publisher = awspublish.create(aws);
-  var headers = {
-    'Cache-Control': 'max-age=315360000, no-transform, public'
-  };
-
-  return gulp.src('build/**')
+  return gulp.src('build/**/*')
     .pipe($.if('**/robots.txt', !argv.production ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
-    // Add a revisioned suffix to the filename for each static asset
-    .pipe($.revAll({
-      ignore: [
-        /^\/apple-touch-icon-precomposed.png$/g,
-        /^\/browserconfig.xml$/g,
-        /^\/crossdomain.xml$/g,
-        /^\/error.html$/g,
-        /^\/humans.txt$/g,
-        /^\/robots.txt$/g
-      ]
-    }))
-    // Gzip, set Content-Encoding headers
-    .pipe(awspublish.gzip())
-    // Publisher will add Content-Length, Content-Type and headers specified above
-    // If not specified it will set x-amz-acl to public-read by default
-    .pipe(publisher.publish(headers))
-    // Create a cache file to speed up consecutive uploads
-    .pipe(publisher.cache())
-    // Print upload updates to console
-    .pipe(awspublish.reporter())
-    // Updates the Default Root Object of a CloudFront distribution
-    .pipe($.cloudfront(aws));
+    .pipe($.ghPages({
+      remoteUrl: 'https://github.com/{name}/{name}.github.io.git',
+      branch: 'master'
+    }));
 });
 
 // Run PageSpeed Insights

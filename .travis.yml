@@ -1,13 +1,14 @@
 language: node_js
 env:
   global:
-    - "AWS_KEY=<YOUR_ENCRYPTED_AWS_KEY>"
-    - "AWS_SECRET=<YOUR_ENCRYPTED_AWS_SECRET>"
+    - secure: <YOUR_ENCRYPTED_DATA>
 node_js:
 - '0.10'
 before_script:
-- npm install -g gulp
+- npm uninstall browser-sync --save-dev
 script:
-- gulp build --release
+- node ./node_modules/gulp/bin/gulp build --release
 after_success:
-- gulp deploy
+- git config credential.helper "store --file=.git/credentials"
+- echo "https://${GIT_TOKEN}:@github.com" > .git/credentials
+- node ./node_modules/gulp/bin/gulp deploy
