@@ -188,7 +188,7 @@ gulp.task('deploy', function () {
     .pipe($.if('**/robots.txt', !argv.production ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
     .pipe($.ghPages({
       remoteUrl: 'https://' + process.env.GITHUB_TOKEN + '@github.com/{username}/{projectname}.git',
-      branch: 'master'
+      branch: 'gh-pages'
     }));
 });
 
