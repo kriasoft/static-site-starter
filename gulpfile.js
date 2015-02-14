@@ -31,10 +31,9 @@ var pagespeed = require('psi');
 var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
-var DEST = './build';             // The build output folder
-var RELEASE = !!argv.release;         // Minimize and optimize during a build?
+var RELEASE = !!argv.release;             // Minimize and optimize during a build?
 var GOOGLE_ANALYTICS_ID = 'UA-XXXXX-X';   // https://www.google.com/analytics/web/
-var AUTOPREFIXER_BROWSERS = [         // https://github.com/ai/autoprefixer
+var AUTOPREFIXER_BROWSERS = [             // https://github.com/ai/autoprefixer
   'ie >= 10',
   'ie_mob >= 10',
   'ff >= 30',
@@ -55,17 +54,17 @@ var pkgs = require('./package.json').dependencies;
 gulp.task('default', ['serve']);
 
 // Clean up
-gulp.task('clean', del.bind(null, [DEST]));
+gulp.task('clean', del.bind(null, ['build/*', '!build/.git'], {dot: true}));
 
 // 3rd party libraries
 gulp.task('vendor', function () {
   return merge(
     gulp.src('node_modules/jquery/dist/*.*')
-      .pipe(gulp.dest(DEST + '/vendor/jquery-' + pkgs.jquery)),
+      .pipe(gulp.dest('build/vendor/jquery-' + pkgs.jquery)),
     gulp.src('node_modules/modernizr/dist/modernizr-build.min.js')
       .pipe($.rename('modernizr.min.js'))
       .pipe($.uglify())
-      .pipe(gulp.dest(DEST + '/vendor/modernizr-' + pkgs.modernizr))
+      .pipe(gulp.dest('build/vendor/modernizr-' + pkgs.modernizr))
   );
 });
 
@@ -73,7 +72,7 @@ gulp.task('vendor', function () {
 gulp.task('assets', function () {
   src.assets = 'assets/**';
   return gulp.src(src.assets)
-    .pipe(gulp.dest(DEST))
+    .pipe(gulp.dest('build'))
     .pipe($.if(watch, reload({stream: true})));
 });
 
@@ -85,14 +84,14 @@ gulp.task('images', function () {
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest(DEST + '/img'))
+    .pipe(gulp.dest('build/img'))
     .pipe($.if(watch, reload({stream: true})));
 });
 
 // Fonts
 gulp.task('fonts', function () {
   return gulp.src('node_modules/bootstrap/fonts/**')
-    .pipe(gulp.dest(DEST + '/fonts'));
+    .pipe(gulp.dest('build/fonts'));
 });
 
 // HTML pages
@@ -111,7 +110,7 @@ gulp.task('pages', function () {
       collapseWhitespace: true,
       minifyJS: true, minifyCSS: true
     })))
-    .pipe(gulp.dest(DEST))
+    .pipe(gulp.dest('build'))
     .pipe($.if(watch, reload({stream: true})));
 });
 
@@ -126,7 +125,7 @@ gulp.task('styles', function () {
     .pipe(RELEASE ? $.cssmin() : $.util.noop())
     .pipe($.rename('style.css'))
     .pipe($.if(!RELEASE, $.sourcemaps.write()))
-    .pipe(gulp.dest(DEST + '/css'))
+    .pipe(gulp.dest('build/css'))
     .pipe($.if(watch, reload({stream: true})));
 });
 
@@ -138,7 +137,7 @@ gulp.task('scripts', function () {
     .pipe($.concat('bundle.js'))
     .pipe($.if(RELEASE, $.uglify()))
     .pipe($.if(!RELEASE, $.sourcemaps.write()))
-    .pipe(gulp.dest(DEST + '/js'))
+    .pipe(gulp.dest('build/js'))
     .pipe($.if(watch, reload({stream: true})));
 });
 
@@ -161,12 +160,12 @@ gulp.task('serve', ['build'], function () {
     //     will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: DEST,
+      baseDir: './build',
       middleware: function (req, res, cb) {
         var uri = url.parse(req.url);
         if (uri.pathname.length > 1 &&
           path.extname(uri.pathname) === '' &&
-          fs.existsSync(DEST + uri.pathname + '.html')) {
+          fs.existsSync('./build' + uri.pathname + '.html')) {
           req.url = uri.pathname + '.html' + (uri.search || '');
         }
         cb();
