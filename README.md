@@ -2,10 +2,7 @@
 
 > This is a static site project template powered by [Gulp](http://gulpjs.com/),
 > [Jade](http://jade-lang.com/), [Bootstrap](http://getbootstrap.com/),
-> [LESS](http://lesscss.org/), [BrowserSync](http://www.browsersync.io);
-> and pre-configured for deployment to [Amazon S3](http://aws.amazon.com/s3/) /
-> [CloudFront](http://aws.amazon.com/cloudfront/)
-> ([CDN](http://en.wikipedia.org/wiki/Content_delivery_network) hosting).
+> [LESS](http://lesscss.org/) and [BrowserSync](http://www.browsersync.io).
 
 #### Getting Started
 
@@ -51,8 +48,7 @@ by running:
 > gulp deploy   # or `gulp deploy --production`
 ```
 
-You just need to make sure that you have set AWS_KEY and AWS_SECRET environment
-variables.
+You just need to make sure that you have set [GITHUB_TOKEN](https://github.com/settings/applications) environment variable.
 
 #### Keeping Up-to-Date
 

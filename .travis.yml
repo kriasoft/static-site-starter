@@ -9,6 +9,6 @@ before_install:
 script:
 - node ./node_modules/gulp/bin/gulp build --release
 after_success:
-- git config credential.helper "store --file=.git/credentials"
-- echo "https://${GIT_TOKEN}:@github.com" > .git/credentials
+- git config --global user.name = "Your Name"
+- git config --global user.email = "email@example.com"
 - node ./node_modules/gulp/bin/gulp deploy

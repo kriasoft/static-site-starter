@@ -180,10 +180,14 @@ gulp.task('serve', ['build'], function () {
 
 // Publish to GitHub Pages
 gulp.task('deploy', function () {
+  // To deploy with Travis CI:
+  //   1. Generate OAuth token on GitHub > Settings > Application page
+  //   2. Encrypt and save that token into the `.travis.yml` file by running:
+  //      `travis encrypt GITHUB_TOKEN="<your-oauth-token>" --add`
   return gulp.src('build/**/*')
     .pipe($.if('**/robots.txt', !argv.production ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
     .pipe($.ghPages({
-      remoteUrl: 'https://github.com/{name}/{name}.github.io.git',
+      remoteUrl: 'https://' + process.env.GITHUB_TOKEN + '@github.com/{username}/{projectname}.git',
       branch: 'master'
     }));
 });
