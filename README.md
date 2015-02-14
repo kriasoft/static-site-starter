@@ -1,10 +1,10 @@
 ## Static Website Starter Kit &nbsp; [![Tips](http://img.shields.io/gratipay/koistya.svg?style=flat)](https://gratipay.com/koistya)
 
 > This is a static site project template powered by [Gulp](http://gulpjs.com/),
-> [Assemble](http://assemble.io/), [Handlebars](http://handlebarsjs.com/),
-> [Bootstrap](http://getbootstrap.com/), [LESS](http://lesscss.org/),
-> [BrowserSync](http://www.browsersync.io); and pre-configured for deployment to
-> [Amazon S3](http://aws.amazon.com/s3/) / [CloudFront](http://aws.amazon.com/cloudfront/)
+> [Jade](http://jade-lang.com/), [Bootstrap](http://getbootstrap.com/),
+> [LESS](http://lesscss.org/), [BrowserSync](http://www.browsersync.io);
+> and pre-configured for deployment to [Amazon S3](http://aws.amazon.com/s3/) /
+> [CloudFront](http://aws.amazon.com/cloudfront/)
 > ([CDN](http://en.wikipedia.org/wiki/Content_delivery_network) hosting).
 
 #### Getting Started

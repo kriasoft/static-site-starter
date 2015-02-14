@@ -35,17 +35,7 @@ var AUTOPREFIXER_BROWSERS = [               // https://github.com/ai/autoprefixe
 var src = {};
 var watch = false;
 var reload = browserSync.reload;
-var pkgs = (function () {
-    var temp = {};
-    var map = function (source) {
-        for (var key in source) {
-            temp[key.replace(/[^a-z0-9]/gi, '')] = source[key].substring(1);
-        }
-    };
-    map(require('./package.json').dependencies);
-    map(require('./bower.json').dependencies);
-    return temp;
-}());
+var pkgs = require('./package.json').dependencies;
 
 // The default task
 gulp.task('default', ['serve']);
@@ -56,9 +46,9 @@ gulp.task('clean', del.bind(null, [DEST]));
 // 3rd party libraries
 gulp.task('vendor', function () {
     return merge(
-        gulp.src('bower_components/jquery/dist/**')
+        gulp.src('node_modules/jquery/dist/*.*')
             .pipe(gulp.dest(DEST + '/vendor/jquery-' + pkgs.jquery)),
-        gulp.src('bower_components/modernizr/modernizr.js')
+        gulp.src('node_modules/modernizr/dist/modernizr-build.min.js')
             .pipe($.rename('modernizr.min.js'))
             .pipe($.uglify())
             .pipe(gulp.dest(DEST + '/vendor/modernizr-' + pkgs.modernizr))
@@ -95,19 +85,18 @@ gulp.task('fonts', function () {
 gulp.task('pages', function () {
     src.pages = ['pages/**/*', 'layouts/**/*', 'partials/**/*'];
     return gulp.src(src.pages[0])
-        .pipe($.if('*.hbs', $.assemble({
-            data: { pkgs: pkgs },
-            partials: 'partials/**/*.hbs',
-            layout: 'default',
-            layoutext: '.hbs',
-            layoutdir: 'layouts'
+        .pipe($.if(/\.jade$/, $.jade({
+            pretty: !RELEASE,
+            locals: {
+                pkgs: pkgs,
+                googleAnalyticsID: GOOGLE_ANALYTICS_ID
+            }
         })))
         .pipe($.if(RELEASE, $.htmlmin({
             removeComments: true,
             collapseWhitespace: true,
             minifyJS: true, minifyCSS: true
         })))
-        .pipe($.replace('UA-XXXXX-X', GOOGLE_ANALYTICS_ID))
         .pipe(gulp.dest(DEST))
         .pipe($.if(watch, reload({stream: true})));
 });
