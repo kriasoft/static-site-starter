@@ -26,7 +26,6 @@ var $ = require('gulp-load-plugins')();
 var del = require('del');
 var merge = require('merge-stream');
 var runSequence = require('run-sequence');
-var pagespeed = require('psi');
 var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
@@ -193,11 +192,12 @@ gulp.task('deploy', function () {
 });
 
 // Run PageSpeed Insights
-// Update `url` below to the public URL for your site
-gulp.task('pagespeed', pagespeed.bind(null, {
-  // By default, we use the PageSpeed Insights free (no API key) tier.
-  // You can use a Google Developer API key if you have one.
-  // See http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
-  url: 'https://example.com',
-  strategy: 'mobile'
-}));
+gulp.task('pagespeed', function (cb) {
+  // Update the below URL to the public URL of your site
+  require('psi').output('example.com', {
+    strategy: 'mobile'
+    // By default we use the PageSpeed Insights free (no API key) tier.
+    // Use a Google Developer API key if you have one: http://goo.gl/RkN0vE
+    // key: 'YOUR_API_KEY'
+  }, cb);
+});
