@@ -25,14 +25,14 @@
 
 #### How to Build
 
-```
-> gulp build    # or `gulp build --release`
+```sh
+$ gulp build    # or `gulp build --release`
 ```
 
 #### How to Run
 
-```
-> gulp          # or `gulp --release`
+```sh
+$ gulp          # or `gulp --release`
 ```
 
 This command builds the project, launches [BrowserSync](http://www.browsersync.io)
@@ -44,8 +44,8 @@ If [Travis CI](https://travis-ci.org/) is watching this repo, it will deploy
 the site automatically after each commit. Otherwise, you may deploy it manually
 by running:
 
-```
-> gulp deploy   # or `gulp deploy --production`
+```sh
+$ gulp deploy   # or `gulp deploy --production`
 ```
 
 You just need to make sure that you have set [GITHUB_TOKEN](https://github.com/settings/applications) environment variable.
@@ -55,10 +55,10 @@ You just need to make sure that you have set [GITHUB_TOKEN](https://github.com/s
 Down the road you may want to pull and merge the latest updates from this repo
 back to your local project. To do so, you simply run:
 
-```
-> git fetch upstream
-> git checkout master
-> git merge upstream/master
+```sh
+$ git fetch upstream
+$ git checkout master
+$ git merge upstream/master
 ```
 
 For more details see: [Syncing a Fork on GitHub](https://help.github.com/articles/syncing-a-fork)
