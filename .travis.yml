@@ -11,4 +11,4 @@ script:
 after_success:
 - git config --global user.name = "Your Name"
 - git config --global user.email = "email@example.com"
-- node ./node_modules/gulp/bin/gulp deploy
+- node ./node_modules/gulp/bin/gulp deploy --production
